@@ -138,19 +138,48 @@ void syscall(){
 void jump(uint16_t destino){
 
     previsao_correta = (destino == ex_next_pc); 
-       
+    
+     if(previsao_correta == 0){
+			ex_cond = 0;
+         	id_cond = 0;
+         	if_pc = destino;
+       	}
+      uint16_t index = ex_current_pc % table_memory_size;
+      branch_prediction_table[index].destiny_pc = destino;
+      branch_prediction_table[index].predicted_taken = 1;
+      branch_prediction_table[index].jump_pc = ex_current_pc;  
+      branch_prediction_table[index].estado = ocupado;
 }
 
 void jump_cond(uint16_t destino, uint16_t condicao ){
 
+	uint16_t index = ex_current_pc % table_memory_size;
+
     if(condicao == 1){
         previsao_correta = (destino == ex_next_pc);
         printf("Realizado o jump condicional, pc atual: %d\n", ex_next_pc);
+        
+        if(previsao_correta == 0){
+        	ex_cond = 0;
+         	id_cond = 0;
+         	if_pc = destino;
+        }
+        branch_prediction_table[index].destiny_pc = destino;  
+        branch_prediction_table[index].predicted_taken = 1;  
  	}
  	else{
 	    previsao_correta = ((ex_current_pc + 1) == ex_next_pc);
-	    printf("Jump condicional nao realizado, pc atual: %d\n", ex_next_pc);
- 	}  
+	    printf("Jump condicional nao realizado, pc atual: %d\n", ex_next_pc);	    
+	    if(previsao_correta == 0){
+        	ex_cond = 0;
+         	id_cond = 0;
+         	if_pc = (ex_current_pc + 1);
+        }
+	    branch_prediction_table[index].destiny_pc = (ex_current_pc + 1);  
+	    branch_prediction_table[index].predicted_taken = 0;
+ 	}
+      branch_prediction_table[index].jump_pc = ex_current_pc;  
+      branch_prediction_table[index].estado = ocupado;  
 }
 
 void execute_r(uint16_t opcode, uint16_t destiny, uint16_t op1, uint16_t op2){
@@ -367,23 +396,7 @@ void execute(){
      	    ex_immediate = id_immediate;
      	    ex_op1 = id_op1;
    	        execute_i(ex_opcode, ex_immediate, ex_op1);
-   	   
-            if(ex_opcode == 0 || ex_opcode == 1){
-                if(ex_branch == 1){
-                    if(previsao_correta == 0){
-                        ex_cond = 0;
-         	     		id_cond = 0;
-         	     		if_pc = ex_immediate;
-       			    }
-       			}
-                uint16_t index = ex_pc % table_memory_size;
-           		branch_prediction_table[index].destiny_pc = ex_immediate;
-           		branch_prediction_table[index].predicted_taken = previsao_correta;
-           		branch_prediction_table[index].jump_pc = ex_current_pc;  
-           		branch_prediction_table[index].estado = ocupado;
-       		  
-            }
-      }    
+     	 }   
 }
 
 const char* get_reg_name_str (uint16_t reg)
@@ -437,5 +450,4 @@ int main (int argc, char **argv)
 	printf("\n");
     return 0;
 }
-
 
