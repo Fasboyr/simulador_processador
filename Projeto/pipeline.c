@@ -142,8 +142,8 @@ void jump(uint16_t destino){
      if(previsao_correta == 0){
 			ex_cond = 0;
          	id_cond = 0;
-         	if_pc = destino;
        	}
+      if_pc = destino;
       uint16_t index = ex_current_pc % table_memory_size;
       branch_prediction_table[index].destiny_pc = destino;
       branch_prediction_table[index].predicted_taken = 1;
@@ -162,8 +162,8 @@ void jump_cond(uint16_t destino, uint16_t condicao ){
         if(previsao_correta == 0){
         	ex_cond = 0;
          	id_cond = 0;
-         	if_pc = destino;
         }
+        if_pc = destino;
         branch_prediction_table[index].destiny_pc = destino;  
         branch_prediction_table[index].predicted_taken = 1;  
  	}
@@ -173,8 +173,8 @@ void jump_cond(uint16_t destino, uint16_t condicao ){
 	    if(previsao_correta == 0){
         	ex_cond = 0;
          	id_cond = 0;
-         	if_pc = (ex_current_pc + 1);
         }
+        if_pc = (ex_current_pc + 1);
 	    branch_prediction_table[index].destiny_pc = (ex_current_pc + 1);  
 	    branch_prediction_table[index].predicted_taken = 0;
  	}
@@ -450,4 +450,3 @@ int main (int argc, char **argv)
 	printf("\n");
     return 0;
 }
-
