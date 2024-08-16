@@ -1,4 +1,4 @@
-# HASS - Hypothetical Architecture Simulator System
+# Sistema de Simulação de Arquitetura Hipotética
 
 Esse projeto foi desenvolvido como uma atividade avaliativa para a disciplina de Arquitetura de Computadores, usando uma arquitetura hipótetica vista em sala de aula e que foi criada pelo professor Eduardo Molina Cruz
 
@@ -20,5 +20,4 @@ Format R
  Format I:
  - Opcode 00 - jump
  - Opcode 01 - jump_cond
- - Opcode 02 - nop
  - Opcode 03 - mov
